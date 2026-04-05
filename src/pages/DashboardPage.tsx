@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, Wallet } from "lucide-react";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useFinance } from "../context/FinanceContext";
 import { StatCard } from "../components/StatCard";
 import { totals, monthlyExpense, formatCurrency } from "../utils/finance";
@@ -63,12 +63,21 @@ export default function DashboardPage() {
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={spendByCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95}>
+                <Pie 
+                  data={spendByCategory} 
+                  dataKey="value" 
+                  nameKey="name" 
+                  innerRadius={55} 
+                  outerRadius={95}
+                  label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
+                  labelLine={false}
+                >
                   {spendByCategory.map((entry, index) => (
                     <Cell key={entry.name} fill={pieColors[index % pieColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value) => formatCurrency(value as number)} />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
