@@ -75,7 +75,9 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="space-y-3">
+        <h3 className="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-300">Insights Section</h3>
+        <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl bg-white p-4 shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
           <p className="text-xs uppercase tracking-wider text-slate-500">Highest Spending Category</p>
           <p className="mt-2 flex items-center gap-2 font-semibold">
@@ -96,6 +98,7 @@ export default function DashboardPage() {
             <ArrowUp size={16} className="text-green-500" />
             {summary.expenses === 0 ? "No expense yet" : `${Math.round((summary.income / summary.expenses) * 100)}% ratio`}
           </p>
+        </div>
         </div>
       </section>
     </div>

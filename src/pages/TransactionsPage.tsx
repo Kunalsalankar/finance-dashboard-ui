@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { useFinance } from "../context/FinanceContext";
 import { TransactionForm } from "../components/TransactionForm";
@@ -15,6 +15,12 @@ export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState<SortBy>("date");
   const [editing, setEditing] = useState<Transaction | null>(null);
 
+  useEffect(() => {
+    if (role !== "admin" && editing) {
+      setEditing(null);
+    }
+  }, [role, editing]);
+
   const filtered = useMemo(() => {
     return [...transactions]
       .filter((t) => (filter === "all" ? true : t.type === filter))
@@ -27,6 +33,7 @@ export default function TransactionsPage() {
       {role === "admin" ? (
         <TransactionForm
           initial={editing ?? undefined}
+          onCancelEdit={() => setEditing(null)}
           onSubmit={(entry) => {
             if (editing) {
               editTransaction(editing.id, entry);
@@ -65,7 +72,7 @@ export default function TransactionsPage() {
 
       <div className="overflow-hidden rounded-2xl bg-white shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
         {filtered.length === 0 ? (
-          <div className="p-10 text-center text-slate-500">No transactions found. Try changing filters.</div>
+          <div className="p-10 text-center text-slate-500">No transactions found. Try changing filters or adding a new one.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">

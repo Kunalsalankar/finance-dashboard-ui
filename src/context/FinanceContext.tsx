@@ -16,8 +16,10 @@ const FinanceContext = createContext<FinanceContextValue | null>(null);
 
 const TRANSACTIONS_KEY = "finance_dashboard_transactions";
 const DARKMODE_KEY = "finance_dashboard_darkmode";
+const ROLE_KEY = "finance_dashboard_role";
 
 const readTransactions = (): Transaction[] => {
+  if (typeof window === "undefined") return mockTransactions;
   const raw = localStorage.getItem(TRANSACTIONS_KEY);
   if (!raw) return mockTransactions;
   try {
@@ -28,9 +30,21 @@ const readTransactions = (): Transaction[] => {
 };
 
 export function FinanceProvider({ children }: { children: React.ReactNode }) {
-  const [role, setRole] = useState<Role>("viewer");
+  const [role, setRole] = useState<Role>(() => {
+    if (typeof window === "undefined") return "viewer";
+    const saved = localStorage.getItem(ROLE_KEY);
+    return saved === "admin" ? "admin" : "viewer";
+  });
   const [transactions, setTransactions] = useState<Transaction[]>(readTransactions);
-  const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem(DARKMODE_KEY) === "1");
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(DARKMODE_KEY) === "1";
+  });
+
+  const updateRole = (nextRole: Role) => {
+    setRole(nextRole);
+    localStorage.setItem(ROLE_KEY, nextRole);
+  };
 
   const addTransaction = (entry: Omit<Transaction, "id">) => {
     setTransactions((prev) => {
@@ -57,7 +71,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = useMemo(
-    () => ({ role, setRole, transactions, addTransaction, editTransaction, darkMode, toggleDarkMode }),
+    () => ({ role, setRole: updateRole, transactions, addTransaction, editTransaction, darkMode, toggleDarkMode }),
     [role, transactions, darkMode],
   );
 
