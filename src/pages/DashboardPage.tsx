@@ -70,7 +70,7 @@ export default function DashboardPage() {
                   innerRadius={55} 
                   outerRadius={95}
                   label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
-                  labelLine={false}
+                  labelLine={true}
                 >
                   {spendByCategory.map((entry, index) => (
                     <Cell key={entry.name} fill={pieColors[index % pieColors.length]} />

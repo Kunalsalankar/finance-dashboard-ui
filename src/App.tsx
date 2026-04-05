@@ -21,7 +21,7 @@ export default function App() {
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as Role)}
-                className="rounded-xl border border-slate-200 bg-transparent px-3 py-2 text-sm dark:border-slate-700"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:[color-scheme:dark]"
               >
                 <option value="viewer">Viewer</option>
                 <option value="admin">Admin</option>
